@@ -16,17 +16,7 @@ xxxAKQJT 98765432 CDHSrrrr xxPPPPPP
 
 ]]
 
--- int的字节表示
-local function to_bit_str( num )
-	local x = ''
-	for i = 1,32,1 do
-		local sep = ''
-		if (i-1)%4 == 0 then sep = ' ' end
-		x = tostring(num & 0x1) .. sep .. x
-		num = num >> 1
-	end
-	return x
-end
+
 
 -- 组合C(m,n)
 local function combo(t,n)
@@ -189,6 +179,19 @@ function card.prime_product_from_rankbit(rankbit)
 	return product
 	-- body
 end
+
+-- int的字节表示
+function card.to_bit_str( num )
+	local x = ''
+	for i = 1,32,1 do
+		local sep = ''
+		if (i-1)%4 == 0 then sep = ' ' end
+		x = tostring(num & 0x1) .. sep .. x
+		num = num >> 1
+	end
+	return x
+end
+
 
 local deck = {}
 
@@ -414,6 +417,7 @@ function lookup.make_others()
 		end
 	end
 
+	rank = lookup.pattern.straight[2] + 1
 	-- 三条
 	for i=1,#card_r do
 		local single = make_int_rank(card_r[i])
@@ -432,7 +436,7 @@ function lookup.make_others()
 	for e in combo(card_r,2) do
 		local single = make_int_rank(e[1],e[2])
 		for i,s in ipairs(single) do
-			-- print(e[1],e[1],e[2],e[2],s)
+			-- print(e[1],e[1],e[2],e[2],s,prime)
 			local one = card.rank[tostring(e[1])][2]
 			local two = card.rank[tostring(e[2])][2]
 			local ss  = card.rank[tostring(s)][2]
@@ -484,7 +488,6 @@ function evaluater.multi(cards)
 	local max_cards = nil
 
 	for e in combo(cards,5) do
-
 		local rank = evaluater.five(e)
 		if rank < max_rank then
 			max_rank = rank
@@ -612,6 +615,10 @@ end
 
 -- print(tostring(card.prime_product_from_cards({c1,c2})))
 
+
+-- local cc = { card.new('Ks'),card.new('8d'),card.new('Kh'),card.new('8h'),card.new('Ts') }
+-- print(card.prime_product_from_cards(cc))
+
 -- ------------- TEST for deck -------------
 
 -- deck.get_full_deck()
@@ -634,10 +641,12 @@ end
 -- lookup.make_all()
 
 -- local count = 0
--- for i,v in pairs(lookup.flush_lookup) do
+-- for k,v in pairs(lookup.flush_lookup) do
+-- 	-- print(tostring(k)..','..tostring(v))
 -- 	count = count + 1
 -- end
--- for i,v in pairs(lookup.unsuited_lookup) do
+-- for k,v in pairs(lookup.unsuited_lookup) do
+-- 	-- print(tostring(k)..','..tostring(v))
 -- 	count = count + 1
 -- end
 -- print('lookup count : ',count)
@@ -672,6 +681,14 @@ end
 
 -- local i,p = evaluater.compare(cards,board)
 -- print(i[1],p[4])
+
+-- local cc = { card.new('Ks'),card.new('8d'),card.new('Kh'),card.new('8h'),card.new('Ts') }
+
+
+-- local r = evaluater.five(cc)
+-- print(r)
+-- print(evaluater.get_rank_class(r)[4])
+
 
 local _P = {
 	card = card,

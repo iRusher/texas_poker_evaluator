@@ -6,26 +6,31 @@ local evaluater = texas.evaluater
 
 evaluater.setup()
 
-local cards = {
-	{card.new('Ah'),card.new('Kh')},
-	{card.new('Qc'),card.new('7d')},
-	{card.new('Js'),card.new('2c')},
-	{card.new('7s'),card.new('5h')}
-}
+-- local cards = {
+-- 	{card.new('Ks'),card.new('8d')},
+-- 	{card.new('Ah'),card.new('4c')},
+-- 	{card.new('Kc'),card.new('5s')},
+-- }
 
-local board = {
-	card.new('3h'),card.new('7h'),card.new('5s'),card.new('8c'),card.new('Th')
-}
+-- local board = {
+-- 	card.new('Kh'),card.new('8h'),card.new('9d'),card.new('3s'),card.new('Ts')
+-- }
 
-local i,p,ps = evaluater.compare(cards,board)
-print(i[1],p[4])
+-- local i,p,ps = evaluater.compare(cards,board)
+-- print(i[1],p[4])
 
-for i,v in ipairs(ps) do
-	local s = ''
-	for j,w in ipairs(v.card) do
-		s = s..'  '..card.int_to_str(w)
-	end
+-- for i,v in ipairs(ps) do
+-- 	local s = ''
+-- 	for j,w in ipairs(v.card) do
+-- 		s = s..'  '..card.int_to_str(w)
+-- 	end
 
-	s = s .. '  ' .. v.pattern[4]
-	print(s)
-end
+-- 	s = s .. '  ' .. v.pattern[4]
+-- 	print(s)
+-- end
+
+
+local cc = { card.new('Ks'),card.new('8d'),card.new('Kh'),card.new('8h'),card.new('Ts') }
+local r = evaluater.five(cc)
+print(r)
+print(evaluater.get_rank_class(r)[4])
