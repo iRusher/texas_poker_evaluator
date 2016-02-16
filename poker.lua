@@ -37,16 +37,6 @@ local function combo(t,n)
   end
 end
 
--- 表格拷贝
-local function tablecopy( t )
-	local tt = {}
-	for i,v in ipairs(t) do
-		table.insert(tt,v)
-	end
-	return tt
-end
-
-
 
 local card = {}
 
@@ -491,7 +481,8 @@ function evaluater.multi(cards)
 		local rank = evaluater.five(e)
 		if rank < max_rank then
 			max_rank = rank
-			max_cards = tablecopy(e)
+			max_cards = {}
+			max_cards = table.move(e,1,#e,1,max_cards)
 		end
 	end
 
@@ -500,30 +491,22 @@ end
 
 
 function evaluater.hand_card(cards)
+	--
 end
 
 function evaluater.eval(cards,board)
-	local count = 0
-	if not cards then
-		count = #cards
-	end
-	if not board then
-		count = count + #board
-	end
-
 	local allcards = {}
-	for k,v in pairs(cards) do
-		table.insert(allcards,v)
+	if cards then
+		table.move(cards,1,#cards,1,allcards)
 	end
-
-	for k,v in pairs(board) do
-		table.insert(allcards,v)
+	
+	if board then
+		table.move(board,1,#board,#allcards + 1,allcards)
 	end
 
 	if #allcards > 2 then
 		return evaluater.multi(allcards)
 	else
-		-- 用作分析之用，最终如果比牌，一定是从C(7,5)
 		return evaluater.hand_card(allcards)
 	end
 end
