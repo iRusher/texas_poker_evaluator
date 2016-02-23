@@ -4,7 +4,7 @@ local card = texas.card
 local lookup = texas.lookup
 local evaluater = texas.evaluater
 
-evaluater.setup()
+evaluater.setup(lookup)
 
 local cards = {
 	{card.new('Ks'),card.new('8d')},
@@ -34,3 +34,7 @@ end
 -- local r = evaluater.five(cc)
 -- print(r)
 -- print(evaluater.get_rank_class(r)[4])
+
+
+lookup.write_to_disk('/Users/rusherpan/work/server/poker/lookup.txt')
+

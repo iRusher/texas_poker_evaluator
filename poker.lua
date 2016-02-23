@@ -453,9 +453,25 @@ function lookup.make_others()
 end
 
 function lookup.make_all()
-	lookup.make_flush()
-	lookup.make_straights_and_highcards()
-	lookup.make_others()
+	if next(lookup.flush_lookup) == nil then
+		lookup.make_flush()
+		lookup.make_straights_and_highcards()
+		lookup.make_others()
+	end
+end
+
+function lookup.write_to_disk(path)
+	local f = io.open(path,'w')
+	if not f then return end
+	for k,v in pairs(lookup.flush_lookup) do
+		f:write(tostring(k)..','..tostring(v))
+		f:write("\n")
+	end
+	for k,v in pairs(lookup.unsuited_lookup) do
+		f:write(tostring(k)..','..tostring(v))
+		f:write("\n")
+	end
+	f:close()
 end
 
 local evaluater = {}
@@ -489,10 +505,6 @@ function evaluater.multi(cards)
 	return max_rank,max_cards,evaluater.get_rank_class(max_rank)
 end
 
-
-function evaluater.hand_card(cards)
-	--
-end
 
 function evaluater.eval(cards,board)
 	local allcards = {}
